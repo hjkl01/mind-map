@@ -30,11 +30,6 @@ const routes = [
         component: WorkbencheEditPage,
       }
     ]
-  },
-
-  {
-    path: '/doc/zh',
-    component: () => import(`./pages/Doc.vue`)
   }
 ]
 

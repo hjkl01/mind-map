@@ -9,7 +9,12 @@
     <div class="aboutBox" :class="{ isDark: isDark }">
       <img src="../../../assets/img/icon.png" alt="" />
       <h2>思绪思维导图</h2>
-      <p>版本：{{ version }}</p>
+      <p>
+        版本：{{ version
+        }}<el-button type="text" style="margin-left: 12px;" @click="checkUpdate"
+          >检查更新</el-button
+        >
+      </p>
       <p>
         官网：
         <span @click="open('homepage')">思绪思维导图</span>
@@ -23,7 +28,9 @@
         <span @click="open('baiduNet')">百度云</span>
         <span @click="open('releases')">Github</span>
       </p>
-      <p style="font-size: 12px;">如需进微信交流群参与讨论，可微信添加：wanglinguanfang。备注：客户端</p>
+      <p style="font-size: 12px;">
+        如需进微信交流群参与讨论，可微信添加：wanglinguanfang。备注：客户端
+      </p>
     </div>
   </el-dialog>
 </template>
@@ -83,6 +90,10 @@ export default {
           break
       }
       window.electronAPI.openUrl(url)
+    },
+
+    checkUpdate() {
+      this.$bus.$emit('check_update', true, true)
     }
   }
 }
