@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import exampleData from 'simple-mind-map/example/exampleData'
 import { storeLocalConfig } from '@/api'
 
 Vue.use(Vuex)
@@ -9,7 +8,6 @@ const store = new Vuex.Store({
   state: {
     fileName: '', // 本地的文件名
     isUnSave: false, // 当前操作是否未保存
-    mindMapData: null, // 思维导图数据
     isHandleLocalFile: false, // 是否操作的是本地文件
     localConfig: {
       // 本地配置
@@ -68,15 +66,6 @@ const store = new Vuex.Store({
     setCurrentFolder(state, data) {
       localStorage.setItem('currentFolder', data)
       state.currentFolder = data
-    },
-
-    /**
-     * @Author: 王林
-     * @Date: 2021-04-10 14:50:01
-     * @Desc: 设置思维导图数据
-     */
-    setMindMapData(state, data) {
-      state.mindMapData = data
     },
 
     // 设置操作本地文件标志位
@@ -180,23 +169,7 @@ const store = new Vuex.Store({
       state.isVIP = data
     }
   },
-  actions: {
-    // 设置初始思维导图数据
-    getUserMindMapData(ctx) {
-      try {
-        let { data } = {
-          data: {
-            data: {
-              mindMapData: exampleData
-            }
-          }
-        }
-        ctx.commit('setMindMapData', data.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-  }
+  actions: {}
 })
 
 export default store

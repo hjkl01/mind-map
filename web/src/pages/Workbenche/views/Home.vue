@@ -48,7 +48,7 @@ import SponsorDialog from '../components/SponsorDialog.vue'
 import SettingDialog from '../components/SettingDialog.vue'
 import VipDialog from '../components/VipDialog.vue'
 import { getLocalConfig } from '@/api'
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   components: {
