@@ -352,7 +352,7 @@ export default {
         console.log(error)
       }
     },
-    
+
     onLocalStorageExceeded() {
       this.$notify({
         type: 'warning',
@@ -402,23 +402,67 @@ export default {
       this.clientConfig = await window.electronAPI.getClientConfig()
       const defaultTheme = this.clientConfig.theme || 'classic4'
       const defaultLayout = this.clientConfig.layout || 'logicalStructure'
-      let storeData = null
       if (data) {
+        // 返回有内容
         this.setFileName(data.name)
+        // content为实际的思维导图数据，字符串格式
         if (data.content) {
-          addMindMapNodeStickerProtocol(data.content.root)
-          storeData = data.content
+          try {
+            const content = JSON.parse(data.content)
+            addMindMapNodeStickerProtocol(content.root)
+            this.mindMapData = content
+            this.mindMapConfig = getConfig() || {}
+          } catch (error) {
+            console.log(error)
+            this.$confirm('文件内容解析失败，可联系开发者解决', '提示', {
+              confirmButtonText: '关闭窗口',
+              showCancelButton: false,
+              showClose: false,
+              type: 'warning'
+            }).then(() => {
+              window.electronAPI.close()
+            })
+            throw new Error('文件内容读取失败')
+          }
         } else {
-          this.$message.info(this.$t('edit.emptyTip'))
-          storeData = this.createDefaultMindMapData(defaultLayout, defaultTheme)
+          // 如果没有内容，那么提示用户
+          try {
+            await this.$confirm(
+              '该文件内容为空，是否用默认数据显示？',
+              '提示',
+              {
+                confirmButtonText: '使用默认数据',
+                cancelButtonText: '直接关闭窗口',
+                showClose: false,
+                type: 'warning'
+              }
+            )
+            const content = this.createDefaultMindMapData(
+              defaultLayout,
+              defaultTheme
+            )
+            this.mindMapData = content
+            this.mindMapConfig = getConfig() || {}
+          } catch (error) {
+            window.electronAPI.close()
+          }
         }
       } else {
-        this.isNewFile = true
-        this.setFileName('未命名')
-        storeData = this.createDefaultMindMapData(defaultLayout, defaultTheme)
+        // 如果没有返回任何内容，可能是后端没有找到文件映射，不能直接显示默认数据，否则会覆盖原有文件导致数据丢失
+        // 直接提示用户重启客户端
+        this.$confirm('文件未找到或读取失败，可重启客户端再试', '提示', {
+          confirmButtonText: '关闭窗口',
+          showCancelButton: false,
+          showClose: false,
+          type: 'warning'
+        }).then(() => {
+          window.electronAPI.close()
+        })
+        throw new Error('文件未找到或读取失败')
+        // this.isNewFile = true
+        // this.setFileName('未命名')
+        // storeData = this.createDefaultMindMapData(defaultLayout, defaultTheme)
       }
-      this.mindMapData = storeData
-      this.mindMapConfig = getConfig() || {}
     },
 
     // 生成默认思维导图数据

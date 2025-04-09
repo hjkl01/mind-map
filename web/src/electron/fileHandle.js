@@ -244,10 +244,15 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
         return
       }
       fs.readFile(file, { encoding: 'utf-8' }, (err, data) => {
-        resolve({
-          name: path.parse(file).name,
-          content: data ? JSON.parse(data) : null
-        })
+        if (err) {
+          // 文件读取失败，返回null
+          resolve(null)
+        } else {
+          resolve({
+            name: path.parse(file).name,
+            content: data || null
+          })
+        }
       })
     })
   })
