@@ -4,6 +4,7 @@
       class="vipDialog"
       :title="''"
       :visible.sync="dialogVisible"
+      :class="{ isDark: isDark }"
       width="700px"
       @close="onClose"
     >
@@ -248,7 +249,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isVIP'])
+    ...mapState({
+      isDark: state => state.localConfig.isDark,
+      isVIP: state => state.isVIP
+    })
   },
   watch: {
     value(val, oldVal) {
@@ -339,6 +343,20 @@ export default {
 .vipFunctionDialog {
   /deep/ .el-dialog__body {
     padding: 0;
+  }
+}
+
+.vipDialog {
+  &.isDark {
+    .vipBox {
+      .desc {
+        background-color: #363b3f;
+      }
+    }
+
+    /deep/ .el-dialog__header {
+      border-bottom: 1px solid transparent;
+    }
   }
 }
 

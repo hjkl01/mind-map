@@ -42,7 +42,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['fileName', 'isUnSave', 'isDark'])
+    ...mapState({
+      fileName: state => state.fileName,
+      isUnSave: state => state.isUnSave,
+      isDark: state => state.localConfig.isDark
+    })
   },
   watch: {
     fileName(val) {
@@ -103,8 +107,16 @@ export default {
 <style lang="less" scoped>
 .workbencheEditContainer {
   &.isDark {
+    background: rgb(39, 42, 46);
+
     .workbencheEditHeader {
       background-color: #262a2e;
+
+      .rightBar {
+        .settingBtn {
+          color: #fff;
+        }
+      }
     }
   }
 

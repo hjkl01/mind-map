@@ -175,6 +175,14 @@ export default {
   flex-direction: column;
 
   &.isDark {
+    .chatInputBox {
+      background-color: #363b3f;
+
+      textarea {
+        background-color: #363b3f;
+        color: hsla(0, 0%, 100%, 0.9);
+      }
+    }
   }
 
   .chatHeader {

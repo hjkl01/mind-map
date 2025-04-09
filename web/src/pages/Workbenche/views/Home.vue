@@ -10,17 +10,17 @@
     <div class="workbencheHomeHeader">
       <MacControl></MacControl>
       <div class="rightBar">
-        <div
-          class="vipBtn iconfont iconhuiyuan-"
-          @click="showVipDialog = true"
-        ></div>
+        <div class="vipBtn" @click="showVipDialog = true">
+          <span class="icon iconfont iconhuiyuan-"></span>
+          <span class="text">开通会员</span>
+        </div>
         <el-dropdown @command="handleCommand" style="margin-right: 12px;">
           <span class="settingBtn el-icon-setting"></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="about">关于软件</el-dropdown-item>
             <!-- <el-dropdown-item command="sponsor">友情赞助</el-dropdown-item> -->
-            <el-dropdown-item command="help">使用帮助</el-dropdown-item>
-            <el-dropdown-item command="doc">开发文档</el-dropdown-item>
+            <!-- <el-dropdown-item command="help">使用帮助</el-dropdown-item>
+            <el-dropdown-item command="doc">开发文档</el-dropdown-item> -->
             <el-dropdown-item command="setting">设置</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -244,16 +244,28 @@ export default {
       align-items: center;
 
       .vipBtn {
-        font-size: 20px;
         cursor: pointer;
         color: #e6a23c;
         font-weight: bold;
         margin-right: 20px;
+        display: flex;
+        align-items: center;
+
+        .icon {
+          font-size: 18px;
+          margin-right: 4px;
+        }
+
+        .text {
+          font-size: 16px;
+        }
       }
 
       .settingBtn {
         font-size: 20px;
         cursor: pointer;
+        display: flex;
+        align-items: center;
       }
     }
   }
