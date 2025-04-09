@@ -564,7 +564,7 @@ export default {
             // this.$bus.$emit('hideNoteContent')
           }
         },
-        openRealtimeRenderOnNodeTextEdit: true,
+        openRealtimeRenderOnNodeTextEdit: false,
         enableAutoEnterTextEditWhenKeydown: true,
         ...(config || {}),
         iconList: [...icon],

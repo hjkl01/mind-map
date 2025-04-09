@@ -419,7 +419,7 @@ export default {
         mousewheelAction: 'zoom',
         mousewheelZoomActionReverse: false,
         createNewNodeBehavior: 'default',
-        openRealtimeRenderOnNodeTextEdit: true,
+        openRealtimeRenderOnNodeTextEdit: false,
         alwaysShowExpandBtn: false,
         enableAutoEnterTextEditWhenKeydown: true,
         imgTextMargin: 0,
