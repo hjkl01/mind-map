@@ -41,6 +41,9 @@ const store = new Vuex.Store({
     supportCheckbox: false, // 是否支持Checkbox插件
     supportLineFlow: false, // 是否支持LineFlow插件
     supportMomentum: false, // 是否支持Momentum插件
+    supportRightFishbone: false, // 是否支持RightFishbone插件
+    supportNodeLink: false, // 是否支持NodeLink插件
+    supportMoreShapes: false, // 是否支持MoreShapes插件
     isDragOutlineTreeNode: false, // 当前是否正在拖拽大纲树的节点
     aiConfig: {
       api: 'http://ark.cn-beijing.volces.com/api/v3/chat/completions',
@@ -50,7 +53,11 @@ const store = new Vuex.Store({
       method: 'POST'
     },
     currentFolder: '', // 当前打开的目录
-    isVIP: false // 是否是会员
+    isVIP: false, // 是否是会员
+    // 扩展主题列表
+    extendThemeGroupList: [],
+    // 内置背景图片
+    bgList: []
   },
   mutations: {
     // 设置本地文件名
@@ -159,6 +166,21 @@ const store = new Vuex.Store({
       state.supportMomentum = data
     },
 
+    // 设置是否支持RightFishbone插件
+    setSupportRightFishbone(state, data) {
+      state.supportRightFishbone = data
+    },
+
+    // 设置是否支持NodeLink插件
+    setSupportNodeLink(state, data) {
+      state.supportNodeLink = data
+    },
+
+    // 设置是否支持MoreShapes插件
+    setSupportMoreShapes(state, data) {
+      state.supportMoreShapes = data
+    },
+
     // 设置树节点拖拽
     setIsDragOutlineTreeNode(state, data) {
       state.isDragOutlineTreeNode = data
@@ -167,6 +189,16 @@ const store = new Vuex.Store({
     // 设置是否是会员
     setIsVIP(state, data) {
       state.isVIP = data
+    },
+    
+    // 扩展主题列表
+    setExtendThemeGroupList(state, data) {
+      state.extendThemeGroupList = data
+    },
+
+    // 设置背景图片列表
+    setBgList(state, data) {
+      state.bgList = data
     }
   },
   actions: {}
