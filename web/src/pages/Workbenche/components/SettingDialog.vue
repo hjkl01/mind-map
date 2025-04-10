@@ -65,6 +65,15 @@
           @change="toggleDark"
         ></el-checkbox>
       </div>
+      <div class="row">
+        <div class="label">默认保存路径</div>
+        <div class="value" style="margin-right: 6px;">
+          {{ config.defaultSaveFolder }}
+        </div>
+        <el-button size="mini" @click="selectFolder">{{
+          config.defaultSaveFolder ? '修改' : '选择'
+        }}</el-button>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -104,7 +113,8 @@ export default {
       config: {
         layout: '',
         theme: '',
-        viewTranslateChangeTriggerAutoSave: false
+        viewTranslateChangeTriggerAutoSave: false,
+        defaultSaveFolder: ''
       },
       clientConfig: null,
       otherConfig: {
@@ -142,6 +152,7 @@ export default {
       this.config.theme = this.clientConfig.theme || 'classic4'
       this.config.viewTranslateChangeTriggerAutoSave =
         this.clientConfig.viewTranslateChangeTriggerAutoSave || false
+      this.config.defaultSaveFolder = this.clientConfig.defaultSaveFolder
     },
 
     onChange() {
@@ -159,6 +170,19 @@ export default {
       this.setLocalConfig({
         isDark: val
       })
+    },
+
+    async selectFolder() {
+      try {
+        const res = await window.electronAPI.selectOpenFolder()
+        if (res) {
+          this.config.defaultSaveFolder = res
+          this.onChange()
+        }
+      } catch (error) {
+        console.log(error)
+        this.$message.error('选择路径失败')
+      }
     }
   }
 }

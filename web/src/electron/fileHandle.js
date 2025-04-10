@@ -25,7 +25,7 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
   const openIds = []
   const openIdToWin = {}
   const windowSize = getEditWindowSize() || {}
-  const createEditWindow = async (event, id) => {
+  const createEditWindow = async (event, id, isCreate) => {
     openIds.push(id)
     const options = {
       frame: false,
@@ -82,18 +82,21 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
         ...windowSize
       })
     })
+    const query = isCreate ? '?isCreate=true' : ''
     if (process.env.WEBPACK_DEV_SERVER_URL) {
       // Load the url of the dev server if in development mode
       win.loadURL(
-        process.env.WEBPACK_DEV_SERVER_URL + '/#/workbenche/edit/' + id
+        process.env.WEBPACK_DEV_SERVER_URL + '/#/workbenche/edit/' + id + query
       )
       if (!process.env.IS_TEST) win.webContents.openDevTools()
     } else {
       // Load the index.html when not in development
-      win.loadURL('app://./index.html/#/workbenche/edit/' + id)
+      win.loadURL('app://./index.html/#/workbenche/edit/' + id + query)
     }
   }
-  ipcMain.on('create', createEditWindow)
+  ipcMain.on('create', (...args) => {
+    createEditWindow(...args, true)
+  })
 
   // 获取窗口是否处于最大化
   ipcMain.handle('getIsMaximize', (event, id) => {

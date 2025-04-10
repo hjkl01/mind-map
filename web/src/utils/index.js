@@ -37,7 +37,7 @@ export const fileToBuffer = file => {
 
 // 判断url是否是http协议或者data:url协议的
 const checkIsHttpOrDataUrl = (url) => {
-  return /^https?:\/\//.test(url) || /^data:/.test(url)
+  return /^https?:\/\//.test(url) || /^data:/.test(url) || /^smm_img_key_/.test(url)
 }
 
 // 将贴纸地址统一转成web线上版

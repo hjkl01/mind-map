@@ -398,6 +398,7 @@ export default {
 
     // 获取思维导图数据
     async getData() {
+      const { isCreate } = this.$route.query || {}
       let data = await window.electronAPI.getFileContent(this.$route.params.id)
       this.clientConfig = await window.electronAPI.getClientConfig()
       const defaultTheme = this.clientConfig.theme || 'classic4'
@@ -448,20 +449,29 @@ export default {
           }
         }
       } else {
-        // 如果没有返回任何内容，可能是后端没有找到文件映射，不能直接显示默认数据，否则会覆盖原有文件导致数据丢失
-        // 直接提示用户重启客户端
-        this.$confirm('文件未找到或读取失败，可重启客户端再试', '提示', {
-          confirmButtonText: '关闭窗口',
-          showCancelButton: false,
-          showClose: false,
-          type: 'warning'
-        }).then(() => {
-          window.electronAPI.close()
-        })
-        throw new Error('文件未找到或读取失败')
-        // this.isNewFile = true
-        // this.setFileName('未命名')
-        // storeData = this.createDefaultMindMapData(defaultLayout, defaultTheme)
+        if (isCreate) {
+          // 如果创建情况，那么显示默认内容
+          this.isNewFile = true
+          this.setFileName('未命名')
+          const content = this.createDefaultMindMapData(
+            defaultLayout,
+            defaultTheme
+          )
+          this.mindMapData = content
+          this.mindMapConfig = getConfig() || {}
+        } else {
+          // 如果编辑情况，且没有返回任何内容，可能是后端没有找到文件映射，不能直接显示默认数据，否则会覆盖原有文件导致数据丢失
+          // 直接提示用户重启客户端
+          this.$confirm('文件未找到或读取失败，可重启客户端再试', '提示', {
+            confirmButtonText: '关闭窗口',
+            showCancelButton: false,
+            showClose: false,
+            type: 'warning'
+          }).then(() => {
+            window.electronAPI.close()
+          })
+          throw new Error('文件未找到或读取失败')
+        }
       }
     },
 
@@ -868,7 +878,7 @@ export default {
         id,
         JSON.stringify(data),
         this.fileName,
-        currentFolder || ''
+        currentFolder || this.clientConfig.defaultSaveFolder || ''
       )
       if (res) {
         this.isNewFile = false
