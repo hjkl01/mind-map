@@ -18,6 +18,7 @@
           <span class="settingBtn el-icon-setting"></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="about">关于软件</el-dropdown-item>
+            <el-dropdown-item command="help">使用帮助</el-dropdown-item>
             <!-- <el-dropdown-item command="sponsor">友情赞助</el-dropdown-item> -->
             <!-- <el-dropdown-item command="help">使用帮助</el-dropdown-item>
             <el-dropdown-item command="doc">开发文档</el-dropdown-item> -->
@@ -108,9 +109,10 @@ export default {
           this.showSponsorDialog = true
           break
         case 'help':
-          window.electronAPI.openUrl(
-            'https://wanglin2.github.io/mind-map-docs/help/help1.html'
-          )
+          window.electronAPI.openHelpPage()
+          // window.electronAPI.openUrl(
+          //   'https://wanglin2.github.io/mind-map-docs/help/help1.html'
+          // )
           break
         case 'doc':
           window.electronAPI.openUrl(

@@ -10,6 +10,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   close: () => ipcRenderer.send('close'),
   destroy: () => ipcRenderer.send('destroy'),
   create: id => ipcRenderer.send('create', id),
+  openHelpPage: () => ipcRenderer.send('openHelpPage'),
   getFileContent: id => ipcRenderer.invoke('getFileContent', id),
   getFilePath: id => ipcRenderer.invoke('getFilePath', id),
   save: (id, data, fileName, defaultPath) =>
@@ -42,5 +43,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getFilesInDir: (dir, ext) => ipcRenderer.invoke('getFilesInDir', dir, ext),
   checkFileExist: filePath => ipcRenderer.invoke('checkFileExist', filePath),
   getClientUUID: () => ipcRenderer.invoke('getClientUUID'),
-  openExternal: url => ipcRenderer.invoke('openExternal', url),
+  openExternal: url => ipcRenderer.invoke('openExternal', url)
 })

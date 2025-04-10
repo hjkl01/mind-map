@@ -4,6 +4,7 @@ import EditPage from '@/pages/Edit/Index'
 import WorkbenchePage from '@/pages/Workbenche/Index'
 import WorkbencheHomePage from '@/pages/Workbenche/views/Home'
 import WorkbencheEditPage from '@/pages/Workbenche/views/Edit'
+import WorkbencheHelpPage from '@/pages/Workbenche/views/Help.vue'
 
 Vue.use(VueRouter)
 
@@ -28,6 +29,11 @@ const routes = [
         path: 'edit/:id',
         name: 'WorkbencheEdit',
         component: WorkbencheEditPage,
+      },
+      {
+        path: 'help',
+        name: 'WorkbencheHelpPage',
+        component: WorkbencheHelpPage,
       }
     ]
   }

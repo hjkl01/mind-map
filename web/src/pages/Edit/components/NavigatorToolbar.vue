@@ -93,6 +93,11 @@
       <Demonstrate :isDark="isDark" :mindMap="mindMap"></Demonstrate>
     </div>
     <div class="item">
+      <el-tooltip effect="dark" content="使用帮助" placement="top">
+        <div class="btn iconfont iconbangzhu" @click="openHelpPage"></div>
+      </el-tooltip>
+    </div>
+    <!-- <div class="item">
       <el-dropdown @command="handleCommand">
         <div class="btn iconfont iconbangzhu"></div>
         <el-dropdown-menu slot="dropdown">
@@ -103,7 +108,7 @@
           <el-dropdown-item disabled>当前：v{{ version }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -170,7 +175,7 @@ export default {
     openGithub() {
       window.electronAPI.openUrl('https://github.com/wanglin2/mind-map')
     },
-    
+
     showSearch() {
       this.$bus.$emit('show_search')
     },
@@ -221,6 +226,10 @@ export default {
 
     openSourceCodeEdit() {
       this.setIsSourceCodeEdit(true)
+    },
+
+    openHelpPage() {
+      window.electronAPI.openHelpPage()
     }
   }
 }
