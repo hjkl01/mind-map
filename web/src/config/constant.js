@@ -167,3 +167,5 @@ export const vipFileUrl = 'https://simple-mind-map.oss-cn-beijing.aliyuncs.com/v
 export const versionUrl = 'https://simple-mind-map.oss-cn-beijing.aliyuncs.com/version.json'
 
 export const helpFileUrl = 'https://simple-mind-map.oss-cn-beijing.aliyuncs.com/help.json'
+
+export const vipFunctionUrl = 'https://simple-mind-map.oss-cn-beijing.aliyuncs.com/vipfunction.json'

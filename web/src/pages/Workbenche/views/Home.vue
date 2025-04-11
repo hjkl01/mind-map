@@ -11,9 +11,9 @@
       <MacControl></MacControl>
       <Name v-if="IS_WIN"></Name>
       <div class="rightBar">
-        <div class="vipBtn" @click="showVipDialog = true">
+        <div class="vipBtn" @click="openVipPage">
           <span class="icon iconfont iconhuiyuan-"></span>
-          <span class="text">开通会员</span>
+          <span class="text">{{ isVIP ? '会员' : '开通会员' }}</span>
         </div>
         <el-dropdown @command="handleCommand" style="margin-right: 12px;">
           <span class="settingBtn el-icon-setting"></span>
@@ -36,7 +36,6 @@
     <AboutDialog v-model="showAboutDialog"></AboutDialog>
     <SponsorDialog v-model="showSponsorDialog"></SponsorDialog>
     <SettingDialog v-model="showSettingDialog"></SettingDialog>
-    <VipDialog v-model="showVipDialog"></VipDialog>
   </div>
 </template>
 
@@ -48,7 +47,6 @@ import FileList from '../components/FileList.vue'
 import AboutDialog from '../components/AboutDialog.vue'
 import SponsorDialog from '../components/SponsorDialog.vue'
 import SettingDialog from '../components/SettingDialog.vue'
-import VipDialog from '../components/VipDialog.vue'
 import { getLocalConfig } from '@/api'
 import { mapState, mapMutations } from 'vuex'
 import Name from '../components/Name.vue'
@@ -62,7 +60,6 @@ export default {
     AboutDialog,
     SponsorDialog,
     SettingDialog,
-    VipDialog,
     Name
   },
   data() {
@@ -75,7 +72,8 @@ export default {
   },
   computed: {
     ...mapState({
-      isDark: state => state.localConfig.isDark
+      isDark: state => state.localConfig.isDark,
+      isVIP: state => state.isVIP
     })
   },
   watch: {
@@ -201,6 +199,10 @@ export default {
           }
         })
       }
+    },
+
+    openVipPage() {
+      window.electronAPI.openVipPage()
     }
   }
 }

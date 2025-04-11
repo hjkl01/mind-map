@@ -1,5 +1,5 @@
 <template>
-  <div class="workbencheHelpContainer" :class="{ isDark: isDark }">
+  <div class="workbencheHelpContainer">
     <div class="workbencheHelpHeader">
       <MacControl></MacControl>
       <Name v-if="IS_WIN"></Name>
@@ -58,11 +58,6 @@ export default {
       helpList: []
     }
   },
-  computed: {
-    ...mapState({
-      isDark: state => state.localConfig.isDark
-    })
-  },
   created() {
     this.getHelpInfo()
     document.title = '思维导图 - 使用帮助'
@@ -94,17 +89,6 @@ export default {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-
-  &.isDark {
-    background: rgb(39, 42, 46);
-
-    .workbencheHelpHeader {
-      background-color: #262a2e;
-
-      .rightBar {
-      }
-    }
-  }
 
   .workbencheHelpHeader {
     position: relative;
