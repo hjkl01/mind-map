@@ -2,6 +2,7 @@
   <div class="workbencheEditContainer" :class="{ isDark: isDark }">
     <div class="workbencheEditHeader">
       <MacControl></MacControl>
+      <Name v-if="IS_WIN"></Name>
       <div class="inputBox">
         <el-input
           v-model="name"
@@ -29,12 +30,14 @@ import Edit from '../../Edit/Index.vue'
 import WinControl from '../components/WinControl.vue'
 import MacControl from '../components/MacControl.vue'
 import { mapState, mapMutations } from 'vuex'
+import Name from '../components/Name.vue'
 
 export default {
   components: {
     Edit,
     MacControl,
-    WinControl
+    WinControl,
+    Name
   },
   data() {
     return {

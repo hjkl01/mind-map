@@ -9,6 +9,7 @@
   >
     <div class="workbencheHomeHeader">
       <MacControl></MacControl>
+      <Name v-if="IS_WIN"></Name>
       <div class="rightBar">
         <div class="vipBtn" @click="showVipDialog = true">
           <span class="icon iconfont iconhuiyuan-"></span>
@@ -50,6 +51,7 @@ import SettingDialog from '../components/SettingDialog.vue'
 import VipDialog from '../components/VipDialog.vue'
 import { getLocalConfig } from '@/api'
 import { mapState, mapMutations } from 'vuex'
+import Name from '../components/Name.vue'
 
 export default {
   components: {
@@ -60,7 +62,8 @@ export default {
     AboutDialog,
     SponsorDialog,
     SettingDialog,
-    VipDialog
+    VipDialog,
+    Name
   },
   data() {
     return {

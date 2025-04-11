@@ -2,15 +2,37 @@
   <div class="workbencheHelpContainer" :class="{ isDark: isDark }">
     <div class="workbencheHelpHeader">
       <MacControl></MacControl>
+      <Name v-if="IS_WIN"></Name>
       <div class="rightBar">
         <WinControl></WinControl>
       </div>
     </div>
     <div class="workbencheHelpContent customScrollbar">
-      <div v-for="item in helpList">
-        <div class="title">{{ item.title }}</div>
-        <div class="pList">
-          <p v-for="text in item.textList">{{ text }}</p>
+      <div class="title">使用教程</div>
+      <div class="helpList">
+        <div class="helpItem" v-for="item in helpList">
+          <div class="helpTitle">
+            <span class="icon el-icon-document"></span>
+            <span class="text">{{ item.title }}</span>
+          </div>
+          <div class="helpContentList">
+            <div class="helpContentItem" v-for="subItem in item.contentList">
+              <p v-if="typeof subItem === 'string'">{{ subItem }}</p>
+              <el-image
+                v-else-if="subItem.type === 'img'"
+                :src="subItem.list[0]"
+                :preview-src-list="subItem.list"
+                style="width: 200px;"
+              >
+              </el-image>
+              <el-link
+                type="primary"
+                v-else-if="subItem.type === 'link'"
+                @click="openLink(subItem.url)"
+                >{{ subItem.title }}</el-link
+              >
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -23,11 +45,13 @@ import MacControl from '../components/MacControl.vue'
 import { mapState } from 'vuex'
 import axios from 'axios'
 import { helpFileUrl } from '@/config/constant'
+import Name from '../components/Name.vue'
 
 export default {
   components: {
     WinControl,
-    MacControl
+    MacControl,
+    Name
   },
   data() {
     return {
@@ -41,6 +65,7 @@ export default {
   },
   created() {
     this.getHelpInfo()
+    document.title = '思维导图 - 使用帮助'
   },
   methods: {
     async getHelpInfo() {
@@ -48,11 +73,14 @@ export default {
         const { data } = await axios.get(helpFileUrl + '?' + Date.now(), {
           responseType: 'json'
         })
-        console.log(data)
         this.helpList = data
       } catch (error) {
         console.log(error)
       }
+    },
+
+    openLink(url) {
+      window.electronAPI.openUrl(url)
     }
   }
 }
@@ -104,6 +132,46 @@ export default {
     height: 100%;
     padding: 20px;
     overflow-y: auto;
+
+    .title {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .helpList {
+      max-width: 800px;
+      margin: 0 auto;
+
+      .helpItem {
+        margin-bottom: 20px;
+
+        .helpTitle {
+          color: #1a1a1a;
+          font-size: 16px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          margin-bottom: 12px;
+
+          .icon {
+            margin-right: 4px;
+          }
+        }
+
+        .helpContentList {
+          .helpContentItem {
+            p {
+              margin-bottom: 8px;
+              color: #333;
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>
