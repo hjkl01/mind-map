@@ -185,10 +185,10 @@ export default {
           onClick: () => {
             this.openVipPage()
             n.close()
-            localStorage.setItem('vip_tip', true)
+            localStorage.setItem('vip_tip2', true)
           },
           onClose: () => {
-            localStorage.setItem('vip_tip', true)
+            localStorage.setItem('vip_tip2', true)
           }
         })
       }

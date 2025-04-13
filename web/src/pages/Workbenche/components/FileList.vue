@@ -284,20 +284,22 @@ export default {
         customClass: this.isDark ? 'darkElMessageBox' : ''
       })
         .then(async () => {
-          const error = await window.electronAPI.removeMultiFileInRecent(
-            this.multipleSelection.map(item => {
-              return item.url
-            })
-          )
-          if (error) {
+          try {
+            const error = await window.electronAPI.removeMultiFileInRecent(
+              this.multipleSelection.map(item => {
+                return item.url
+              })
+            )
+            if (error) {
+              this.$message.error(error || '删除失败')
+            } else {
+              this.$message.success('删除成功')
+            }
+          } catch (error) {
             this.$message.error(error || '删除失败')
-          } else {
-            this.$message.success('删除成功')
           }
         })
-        .catch(error => {
-          this.$message.error(error || '删除失败')
-        })
+        .catch(error => {})
     },
 
     // 清空最近文件列表
@@ -309,18 +311,20 @@ export default {
         customClass: this.isDark ? 'darkElMessageBox' : ''
       })
         .then(async () => {
-          const error = await window.electronAPI.clearRecentFileList()
-          if (error) {
+          try {
+            const error = await window.electronAPI.clearRecentFileList()
+            if (error) {
+              this.$message.error(error || '清空失败')
+            } else {
+              this.list = []
+              this.recentList = []
+              this.$message.success('清空成功')
+            }
+          } catch (error) {
             this.$message.error(error || '清空失败')
-          } else {
-            this.list = []
-            this.recentList = []
-            this.$message.success('清空成功')
           }
         })
-        .catch(error => {
-          this.$message.error(error || '清空失败')
-        })
+        .catch(() => {})
     },
 
     // 从列表里删除多个文件
