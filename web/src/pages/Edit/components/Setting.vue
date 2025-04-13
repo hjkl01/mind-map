@@ -261,9 +261,10 @@
         <div class="rowItem">
           <el-checkbox
             v-model="localConfigs.isUseHandDrawnLikeStyle"
-            @change="updateLocalConfig('isUseHandDrawnLikeStyle', $event)"
+            @change="checkUpdateVIPConfig('isUseHandDrawnLikeStyle', $event)"
             >{{ $t('setting.isUseHandDrawnLikeStyle') }}</el-checkbox
           >
+          <VipMark></VipMark>
         </div>
       </div>
       <!-- 是否开启动量效果 -->
@@ -271,9 +272,10 @@
         <div class="rowItem">
           <el-checkbox
             v-model="localConfigs.isUseMomentum"
-            @change="updateLocalConfig('isUseMomentum', $event)"
+            @change="checkUpdateVIPConfig('isUseMomentum', $event)"
             >{{ $t('setting.isUseMomentum') }}</el-checkbox
           >
+          <VipMark></VipMark>
         </div>
       </div>
       <!-- 配置鼠标滚轮行为 -->
@@ -396,11 +398,13 @@ import Sidebar from './Sidebar.vue'
 import { storeConfig } from '@/api'
 import { mapState, mapMutations } from 'vuex'
 import Color from './Color.vue'
+import VipMark from './VipMark.vue'
 
 export default {
   components: {
     Sidebar,
-    Color
+    Color,
+    VipMark
   },
   props: {
     configData: {
@@ -592,6 +596,14 @@ export default {
       this.setLocalConfig({
         [key]: value
       })
+    },
+
+    checkUpdateVIPConfig(key, value) {
+      if (!this.isVIPCheck()) {
+        this.localConfigs[key] = false
+        return
+      }
+      this.updateLocalConfig(key, value)
     }
   }
 }
@@ -638,6 +650,7 @@ export default {
       display: flex;
       align-items: center;
       margin-bottom: 5px;
+      position: relative;
 
       .name {
         font-size: 12px;

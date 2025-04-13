@@ -1,5 +1,5 @@
 <template>
-  <el-popover placement="bottom" width="200" trigger="click">
+  <el-popover placement="bottom" width="200" trigger="click" :disabled="!isVIP">
     <div class="annotationConfigBox" :class="{ isDark: isDark }">
       <div class="annotationConfigItem">
         <span class="name">{{ $t('annotation.show') }}</span>
@@ -99,9 +99,11 @@
       :class="{
         disabled: activeNodes.length <= 0 || hasGeneralization
       }"
+      @click="isVIPCheck"
     >
       <span class="icon iconfont iconhighlight"></span>
       <span class="text">{{ $t('annotation.mark') }}</span>
+      <VipMark style="position: absolute; right: -10px; top: -10px;"></VipMark>
     </div>
   </el-popover>
 </template>
@@ -109,6 +111,7 @@
 <script>
 import { lineWidthList } from '@/config'
 import Color from './Color.vue'
+import VipMark from './VipMark.vue'
 
 const defaultConfig = {
   type: 'circle',
@@ -120,7 +123,8 @@ const defaultConfig = {
 
 export default {
   components: {
-    Color
+    Color,
+    VipMark
   },
   props: {
     isDark: {

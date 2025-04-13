@@ -10,6 +10,7 @@ import VueViewer from 'v-viewer'
 import i18n from './i18n'
 import './css/global.css'
 import { getLang } from '@/api'
+import { mapState } from 'vuex'
 // import VConsole from 'vconsole'
 // const vConsole = new VConsole()
 
@@ -19,12 +20,29 @@ Vue.prototype.$bus = bus
 Vue.use(ElementUI)
 Vue.use(VueViewer)
 Vue.mixin({
-  data () {
+  data() {
     return {
       IS_ELECTRON: window.IS_ELECTRON,
       IS_MAC: window.platform === 'darwin',
       IS_WIN: window.platform === 'win32',
       IS_LINUX: window.platform === 'linux'
+    }
+  },
+  computed: {
+    ...mapState({
+      isVIP: state => state.isVIP
+    })
+  },
+  methods: {
+    isVIPCheck(onClick) {
+      if (!this.isVIP) {
+        window.electronAPI.openVipPage()
+        return false
+      }
+      if (typeof onClick === 'function') {
+        onClick()
+      }
+      return true
     }
   }
 })

@@ -104,7 +104,9 @@
               style="margin-top: 8px; margin-bottom: 8px;"
               v-if="bgList.length > 0"
             >
-              <div class="name">{{ $t('baseStyle.builtInBackgroundImage') }}</div>
+              <div class="name">
+                {{ $t('baseStyle.builtInBackgroundImage') }}
+              </div>
               <div
                 class="iconBtn el-icon-arrow-down"
                 :class="{ top: !bgListExpand }"
@@ -116,10 +118,17 @@
                 class="bgItem"
                 v-for="(item, index) in bgList"
                 :key="index"
-                :class="{active: style.backgroundImage === item}"
-                @click="useBg(item)"
+                :class="{ active: style.backgroundImage === item }"
+                @click="
+                  isVIPCheck(() => {
+                    useBg(item)
+                  })
+                "
               >
                 <img :src="item" alt="" />
+                <VipMark
+                  style="position: absolute; right: 0; top: 0;"
+                ></VipMark>
               </div>
             </div>
           </el-tab-pane>
@@ -856,13 +865,15 @@ import {
   supportRootLineKeepSameInCurveLayouts,
   rainbowLinesOptions
 } from '@/config/constant'
+import VipMark from './VipMark.vue'
 
 // 基础样式
 export default {
   components: {
     Sidebar,
     Color,
-    ImgUpload
+    ImgUpload,
+    VipMark
   },
   props: {
     data: {
@@ -1062,7 +1073,7 @@ export default {
 
     // margin初始值
     initMarginStyle() {
-      ['marginX', 'marginY'].forEach(key => {
+      ;['marginX', 'marginY'].forEach(key => {
         this.style[key] = this.mindMap.getThemeConfig()[this.marginActiveTab][
           key
         ]
@@ -1287,6 +1298,7 @@ export default {
         padding: 5px;
         margin-bottom: 8px;
         cursor: pointer;
+        position: relative;
 
         &.active {
           border-color: #409eff;

@@ -21,6 +21,7 @@
             <img :src="item.img || themeImgMap[item.value]" alt="" />
           </div>
           <div class="name">{{ item.name }}</div>
+          <VipMark style="position: absolute; right: 0; top: 0;" v-if="item.isVip"></VipMark>
         </div>
       </div>
     </div>
@@ -33,11 +34,13 @@ import { storeData } from '@/api'
 import { mapState, mapMutations } from 'vuex'
 import themeImgMap from 'simple-mind-map-plugin-themes/themeImgMap'
 import themeList from 'simple-mind-map-plugin-themes/themeList'
+import VipMark from './VipMark.vue'
 
 // 主题
 export default {
   components: {
-    Sidebar
+    Sidebar,
+    VipMark
   },
   props: {
     data: {
@@ -154,6 +157,9 @@ export default {
 
     useTheme(theme) {
       if (theme.value === this.theme) return
+      if (theme.isVip && !this.isVIPCheck()) {
+        return
+      }
       this.theme = theme.value
       this.handleDark()
       const customThemeConfig = this.mindMap.getCustomThemeConfig()
@@ -244,6 +250,7 @@ export default {
       border: 3px solid transparent;
       border-radius: 5px;
       overflow: hidden;
+      position: relative;
 
       &:last-of-type {
         border: none;

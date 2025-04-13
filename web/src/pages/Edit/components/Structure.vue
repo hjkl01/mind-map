@@ -16,6 +16,10 @@
             :class="{ active: item === layout }"
           >
             <img :src="layoutImgMap[item]" alt="" />
+            <VipMark
+              style="position: absolute; right: 0; top: 0;"
+              v-if="isVipLayout(item)"
+            ></VipMark>
           </div>
         </div>
       </div>
@@ -29,11 +33,13 @@ import { storeData } from '@/api'
 import { mapState } from 'vuex'
 import { layoutImgMap } from '@/config/constant.js'
 import { layoutGroupList } from '@/config'
+import VipMark from './VipMark.vue'
 
 // 结构
 export default {
   components: {
-    Sidebar
+    Sidebar,
+    VipMark
   },
   props: {
     mindMap: {
@@ -81,11 +87,24 @@ export default {
   },
   methods: {
     useLayout(layout) {
+      if (this.isVipLayout(layout) && !this.isVIPCheck()) {
+        return
+      }
       this.layout = layout
       this.mindMap.setLayout(layout)
       storeData({
         layout: layout
       })
+    },
+
+    isVipLayout(layout) {
+      return [
+        'verticalTimeline2',
+        'verticalTimeline3',
+        'fishbone2',
+        'rightFishbone',
+        'rightFishbone2'
+      ].includes(layout)
     }
   }
 }
@@ -131,6 +150,7 @@ export default {
         margin-bottom: 12px;
         padding: 5px;
         border-radius: 5px;
+        position: relative;
 
         &:hover {
           box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16),

@@ -34,7 +34,10 @@
             @click="exportType = item.type"
           >
             <div class="icon iconfont" :class="[item.icon, item.type]"></div>
-            <div class="name">{{ item.name }}</div>
+            <div class="name">
+              {{ item.name }}
+              <VipMark v-if="isVipType(item.type)"></VipMark>
+            </div>
             <div class="icon checked el-icon-check"></div>
           </div>
         </div>
@@ -63,9 +66,15 @@
               >
                 <div class="valueSubItem" v-if="['png'].includes(exportType)">
                   <span class="name">{{ $t('export.format') }}</span>
-                  <el-radio-group v-model="imageFormat">
+                  <el-radio-group
+                    v-model="imageFormat"
+                    @change="onimageFormatChange"
+                  >
                     <el-radio label="png">PNG</el-radio>
-                    <el-radio label="jpg">JPG</el-radio>
+                    <el-radio label="jpg">
+                      JPG
+                      <VipMark></VipMark>
+                    </el-radio>
                   </el-radio-group>
                 </div>
                 <div class="valueSubItem">
@@ -132,10 +141,14 @@ import { mapState, mapMutations } from 'vuex'
 import { downTypeList } from '@/config'
 import { isMobile } from 'simple-mind-map/src/utils/index'
 import MarkdownIt from 'markdown-it'
+import VipMark from './VipMark.vue'
 
 // 导出
 let md = null
 export default {
+  components: {
+    VipMark
+  },
   data() {
     return {
       dialogVisible: false,
@@ -196,6 +209,10 @@ export default {
   methods: {
     ...mapMutations(['setExtraTextOnExport']),
 
+    isVipType(type) {
+      return ['mm', 'xlsx'].includes(type)
+    },
+
     handleShowExport() {
       this.fileName = this.localFileName || '思维导图'
       this.dialogVisible = true
@@ -213,6 +230,7 @@ export default {
     },
 
     async confirm() {
+      if (this.isVipType(this.exportType) && !this.isVIPCheck()) return
       this.setExtraTextOnExport(this.extraText)
       if (this.exportType === 'svg') {
         this.$bus.$emit(
@@ -272,11 +290,14 @@ export default {
       } else {
         this.$bus.$emit('export', this.exportType, true, this.fileName)
       }
-      this.$notify.info({
-        title: this.$t('export.notifyTitle'),
-        message: this.$t('export.notifyMessage')
-      })
       this.cancel()
+    },
+
+    onimageFormatChange(val) {
+      if (val === 'jpg' && !this.isVIPCheck()) {
+        this.imageFormat = 'png'
+        return
+      }
     }
   }
 }
@@ -505,7 +526,6 @@ export default {
           .name {
             color: #1a1a1a;
             font-size: 15px;
-            margin-bottom: 5px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;

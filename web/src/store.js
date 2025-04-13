@@ -21,7 +21,7 @@ const store = new Vuex.Store({
       // 是否开启手绘风格
       isUseHandDrawnLikeStyle: false,
       // 是否开启动量效果
-      isUseMomentum: true,
+      isUseMomentum: false,
       // 是否是暗黑模式
       isDark: false,
       // 是否开启AI功能

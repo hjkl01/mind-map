@@ -24,11 +24,23 @@
         <el-button
           size="small"
           style="margin-left: 10px;"
-          @click="mdImportDialogVisible = true"
-          >{{ $t('import.mdImportDialogTitle') }}</el-button
+          @click="
+            isVIPCheck(() => {
+              mdImportDialogVisible = true
+            })
+          "
         >
+          <div style="display: flex;align-items: center;">
+            {{ $t('import.mdImportDialogTitle') }}
+            <VipMark></VipMark>
+          </div>
+        </el-button>
         <div slot="tip" class="el-upload__tip">
-          {{ $t('import.support') }}{{ supportFileStr }}{{ $t('import.file') }}
+          <div>
+            {{ $t('import.support') }}{{ supportFileStr
+            }}{{ $t('import.file') }}
+          </div>
+          <div>其中.mm、.xlsx会员可用<VipMark></VipMark></div>
         </div>
       </el-upload>
       <span slot="footer" class="dialog-footer">
@@ -89,9 +101,13 @@ import markdown from 'simple-mind-map/src/parse/markdown.js'
 import { addMindMapNodeStickerProtocol } from '@/utils'
 import { mapMutations, mapState } from 'vuex'
 import Vue from 'vue'
+import VipMark from './VipMark.vue'
 
 // 导入
 export default {
+  components: {
+    VipMark
+  },
   data() {
     return {
       dialogVisible: false,
@@ -146,7 +162,15 @@ export default {
 
     getRegexp() {
       return new RegExp(
-        `\.(smm|json|xmind|md${this.supportFreemind ? '|mm' : ''}${
+        `\\.(smm|json|xmind|md${this.supportFreemind ? '|mm' : ''}${
+          this.supportExcel ? '|xlsx' : ''
+        })$`
+      )
+    },
+
+    getVipRegexp() {
+      return new RegExp(
+        `\\.(${this.supportFreemind ? 'mm' : ''}${
           this.supportExcel ? '|xlsx' : ''
         })$`
       )
@@ -192,6 +216,9 @@ export default {
             this.$t('import.file')
         )
         this.fileList = []
+      } else if (!this.isVIP && this.getVipRegexp().test(file.name)) {
+        this.fileList = []
+        this.isVIPCheck()
       } else {
         this.fileList.push(file)
       }
@@ -369,6 +396,8 @@ export default {
         this.$bus.$emit('setData', data)
         this.$message.success(this.$t('import.importSuccess'))
         this.cancelImportMd()
+        this.cancel()
+        this.setActiveSidebar(null)
       } catch (error) {
         console.log(error)
         this.$message.error(this.$t('import.fileParsingFailed'))

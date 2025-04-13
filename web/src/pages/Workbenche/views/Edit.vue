@@ -19,6 +19,7 @@
       </div>
       <div class="rightBar">
         <WinControl></WinControl>
+        <Name :isRight="true" v-if="IS_MAC"></Name>
       </div>
     </div>
     <Edit></Edit>

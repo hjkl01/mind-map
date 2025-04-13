@@ -258,7 +258,6 @@ export default {
       isDragOutlineTreeNode: state => state.isDragOutlineTreeNode,
       isDark: state => state.localConfig.isDark,
       enableAi: state => state.localConfig.enableAi,
-      isVIP: state => state.isVIP,
       supportNodeLink: state => state.supportNodeLink
     })
   },
@@ -294,6 +293,11 @@ export default {
   },
   async mounted() {
     await this.getVipInfo()
+    if (this.isVIP) {
+      this.setLocalConfig({
+        isUseMomentum: true
+      })
+    }
     showLoading()
     await this.getData()
     this.init()
@@ -338,7 +342,12 @@ export default {
     clearTimeout(this.autoSaveTimer)
   },
   methods: {
-    ...mapMutations(['setFileName', 'setIsUnSave', 'setIsVIP']),
+    ...mapMutations([
+      'setFileName',
+      'setIsUnSave',
+      'setIsVIP',
+      'setLocalConfig'
+    ]),
 
     // 获取会员信息
     async getVipInfo() {
@@ -711,41 +720,39 @@ export default {
     loadPlugins() {
       if (this.openNodeRichText) this.addRichTextPlugin()
       if (this.isShowScrollbar) this.addScrollbarPlugin()
-      if (this.isVIP) {
-        if (typeof HandDrawnLikeStyle !== 'undefined') {
-          this.$store.commit('setSupportHandDrawnLikeStyle', true)
-          if (this.isUseHandDrawnLikeStyle) this.addHandDrawnLikeStylePlugin()
-        }
-        if (typeof Momentum !== 'undefined') {
-          this.$store.commit('setSupportMomentum', true)
-          if (this.isUseMomentum) this.addMomentumPlugin()
-        }
-        if (typeof Notation !== 'undefined') {
-          this.mindMap.addPlugin(Notation)
-          this.$store.commit('setSupportMark', true)
-        }
-        if (typeof Numbers !== 'undefined') {
-          this.mindMap.addPlugin(Numbers)
-          this.$store.commit('setSupportNumbers', true)
-        }
-        if (typeof Freemind !== 'undefined') {
-          this.mindMap.addPlugin(Freemind)
-          this.$store.commit('setSupportFreemind', true)
-          Vue.prototype.Freemind = Freemind
-        }
-        if (typeof Excel !== 'undefined') {
-          this.mindMap.addPlugin(Excel)
-          this.$store.commit('setSupportExcel', true)
-          Vue.prototype.Excel = Excel
-        }
-        if (typeof Checkbox !== 'undefined') {
-          this.mindMap.addPlugin(Checkbox)
-          this.$store.commit('setSupportCheckbox', true)
-        }
-        if (typeof LineFlow !== 'undefined') {
-          this.mindMap.addPlugin(LineFlow)
-          this.$store.commit('setSupportLineFlow', true)
-        }
+      if (typeof HandDrawnLikeStyle !== 'undefined') {
+        this.$store.commit('setSupportHandDrawnLikeStyle', true)
+        if (this.isUseHandDrawnLikeStyle) this.addHandDrawnLikeStylePlugin()
+      }
+      if (typeof Momentum !== 'undefined') {
+        this.$store.commit('setSupportMomentum', true)
+        if (this.isUseMomentum) this.addMomentumPlugin()
+      }
+      if (typeof Notation !== 'undefined') {
+        this.mindMap.addPlugin(Notation)
+        this.$store.commit('setSupportMark', true)
+      }
+      if (typeof Numbers !== 'undefined') {
+        this.mindMap.addPlugin(Numbers)
+        this.$store.commit('setSupportNumbers', true)
+      }
+      if (typeof Freemind !== 'undefined') {
+        this.mindMap.addPlugin(Freemind)
+        this.$store.commit('setSupportFreemind', true)
+        Vue.prototype.Freemind = Freemind
+      }
+      if (typeof Excel !== 'undefined') {
+        this.mindMap.addPlugin(Excel)
+        this.$store.commit('setSupportExcel', true)
+        Vue.prototype.Excel = Excel
+      }
+      if (typeof Checkbox !== 'undefined') {
+        this.mindMap.addPlugin(Checkbox)
+        this.$store.commit('setSupportCheckbox', true)
+      }
+      if (typeof LineFlow !== 'undefined') {
+        this.mindMap.addPlugin(LineFlow)
+        this.$store.commit('setSupportLineFlow', true)
       }
       if (typeof RightFishbone !== 'undefined') {
         this.mindMap.addPlugin(RightFishbone)
@@ -769,7 +776,8 @@ export default {
               item => {
                 return {
                   ...item,
-                  img: MoreThemes.themeImgMap[item.value]
+                  img: MoreThemes.themeImgMap[item.value],
+                  isVip: true
                 }
               }
             )

@@ -63,7 +63,10 @@
         <span class="name">{{ $t('contextmenu.expandNodeChild') }}</span>
       </div>
       <div class="item" v-if="supportNumbers">
-        <span class="name">{{ $t('contextmenu.number') }}</span>
+        <span class="name">
+          {{ $t('contextmenu.number') }}
+          <VipMark></VipMark>
+        </span>
         <span class="el-icon-arrow-right"></span>
         <div
           class="subItems listBox"
@@ -93,9 +96,14 @@
         </div>
       </div>
       <div class="item" @click="setCheckbox" v-if="supportCheckbox">
-        <span class="name">{{
-          hasCheckbox ? $t('contextmenu.removeToDo') : $t('contextmenu.addToDo')
-        }}</span>
+        <span class="name">
+          {{
+            hasCheckbox
+              ? $t('contextmenu.removeToDo')
+              : $t('contextmenu.addToDo')
+          }}
+          <VipMark></VipMark>
+        </span>
       </div>
       <div class="splitLine"></div>
       <div class="item danger" @click="exec('REMOVE_NODE')">
@@ -135,14 +143,20 @@
         <span class="name">{{ $t('contextmenu.removeNote') }}</span>
       </div>
       <div class="item" @click="exec('LINK_NODE')">
-        <span class="name">{{
-          hasNodeLink
-            ? $t('contextmenu.modifyNodeLink')
-            : $t('contextmenu.linkToNode')
-        }}</span>
+        <span class="name">
+          {{
+            hasNodeLink
+              ? $t('contextmenu.modifyNodeLink')
+              : $t('contextmenu.linkToNode')
+          }}
+          <VipMark></VipMark>
+        </span>
       </div>
       <div class="item" @click="exec('REMOVE_LINK_NODE')" v-if="hasNodeLink">
-        <span class="name">{{ $t('contextmenu.removeNodeLink') }}</span>
+        <span class="name">
+          {{ $t('contextmenu.removeNodeLink') }}
+          <VipMark></VipMark>
+        </span>
       </div>
       <div class="item" @click="exec('REMOVE_CUSTOM_STYLES')">
         <span class="name">{{ $t('contextmenu.removeCustomStyles') }}</span>
@@ -237,9 +251,13 @@ import { transformToMarkdown } from 'simple-mind-map/src/parse/toMarkdown'
 import { transformToTxt } from 'simple-mind-map/src/parse/toTxt'
 import { setDataToClipboard, setImgToClipboard, copy } from '@/utils'
 import { numberTypeList, numberLevelList } from '@/config'
+import VipMark from './VipMark.vue'
 
 // 右键菜单
 export default {
+  components: {
+    VipMark
+  },
   props: {
     mindMap: {
       type: Object
@@ -496,8 +514,9 @@ export default {
           this.node.setNote('')
           break
         case 'LINK_NODE':
-          this.$bus.$emit('show_link_node', this.node)
-          this.hide()
+          this.isVIPCheck(() => {
+            this.$bus.$emit('show_link_node', this.node)
+          })
           break
         case 'REMOVE_LINK_NODE':
           this.$bus.$emit('execCommand', 'SET_NODE_LINK', this.node, null)
@@ -529,9 +548,10 @@ export default {
     createNewFile() {
       create()
     },
-    
+
     // 设置节点编号
     setNodeNumber(prop, value) {
+      if (!this.isVIPCheck()) return
       if (prop === 'type') {
         this.numberType = value
         if (value === '') {
@@ -557,6 +577,7 @@ export default {
 
     // 设置待办
     setCheckbox() {
+      if (!this.isVIPCheck()) return
       this.mindMap.execCommand(
         'SET_CHECKBOX',
         [],
@@ -692,6 +713,8 @@ export default {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
     }
 
     .desc {

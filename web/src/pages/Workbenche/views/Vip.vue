@@ -5,6 +5,7 @@
       <Name v-if="IS_WIN"></Name>
       <div class="rightBar">
         <WinControl></WinControl>
+        <Name :isRight="true" v-if="IS_MAC"></Name>
       </div>
     </div>
     <div class="workbencheVipContent customScrollbar">
@@ -114,26 +115,37 @@
         <div class="vipBox" v-show="showVipBox">
           <div class="functionItem" v-for="item in functionList">
             <div class="functionTitle" v-if="item.title">
+              <img v-if="item.titleIcon" :src="item.titleIcon" alt="">
               <span class="icon iconfont iconhuiyuan-"></span>
               <span class="text">{{ item.title }}</span>
             </div>
             <div class="functionContentList">
               <div
                 class="functionContentItem"
-                v-for="subItem in item.contentList"
+                v-for="(subItem, index) in item.contentList"
+                :key="index"
               >
                 <p v-if="typeof subItem === 'string'">{{ subItem }}</p>
-                <el-image
+                <div
+                  class="imgList"
                   v-else-if="subItem.type === 'img' && subItem.list.length > 0"
-                  :src="subItem.list[0]"
-                  :preview-src-list="subItem.list"
-                  style="width: 200px;"
                 >
-                </el-image>
+                  <el-image
+                    v-for="(img, imgIndex) in subItem.list"
+                    :key="imgIndex"
+                    :src="img"
+                    :preview-src-list="subItem.list"
+                    :initial-index="imgIndex"
+                    style="width: 100px; height: 100px; margin-right: 10px;"
+                    fit="cover"
+                  >
+                  </el-image>
+                </div>
                 <el-link
                   type="primary"
                   v-else-if="subItem.type === 'link'"
                   @click="openLink(subItem.url)"
+                  style="margin-bottom: 12px;"
                   >{{ subItem.title }}</el-link
                 >
               </div>
@@ -192,11 +204,6 @@ export default {
       showVipBox: true
     }
   },
-  computed: {
-    ...mapState({
-      isVIP: state => state.isVIP
-    })
-  },
   watch: {
     isVIP(val) {
       if (val) {
@@ -232,6 +239,11 @@ export default {
       }
     },
 
+    openPayDialog(type) {
+      this.showPayType = type
+      this.qrCodeDialogVisible = true
+    },
+
     doCopy(text) {
       copy(text)
       this.$message.success('复制成功')
@@ -259,6 +271,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.qrCodeDialog {
+  /deep/ .el-dialog__body {
+    padding: 0;
+  }
+
+  div {
+    width: 100%;
+    padding: 20px;
+  }
+
+  img {
+    width: 100%;
+  }
+}
+
 .workbencheVipContainer {
   background-color: #f6f8f9;
   width: 100%;
@@ -418,6 +445,11 @@ export default {
             margin-bottom: 12px;
             color: #e6a23c;
 
+            img {
+              width: 30px;
+              margin-right: 4px;
+            }
+
             .icon {
               margin-right: 4px;
               color: #e6a23c;
@@ -429,6 +461,9 @@ export default {
               p {
                 margin-bottom: 8px;
                 color: #333;
+              }
+
+              .imgList {
               }
             }
           }

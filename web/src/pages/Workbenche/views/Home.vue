@@ -9,7 +9,7 @@
   >
     <div class="workbencheHomeHeader">
       <MacControl></MacControl>
-      <Name v-if="IS_WIN"></Name>
+      <Name></Name>
       <div class="rightBar">
         <div class="vipBtn" @click="openVipPage">
           <span class="icon iconfont iconhuiyuan-"></span>
@@ -20,9 +20,7 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="about">关于软件</el-dropdown-item>
             <el-dropdown-item command="help">使用帮助</el-dropdown-item>
-            <!-- <el-dropdown-item command="sponsor">友情赞助</el-dropdown-item> -->
-            <!-- <el-dropdown-item command="help">使用帮助</el-dropdown-item>
-            <el-dropdown-item command="doc">开发文档</el-dropdown-item> -->
+            <el-dropdown-item command="follow">关注我们</el-dropdown-item>
             <el-dropdown-item command="setting">设置</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -34,7 +32,7 @@
       <FileList></FileList>
     </div>
     <AboutDialog v-model="showAboutDialog"></AboutDialog>
-    <SponsorDialog v-model="showSponsorDialog"></SponsorDialog>
+    <FollowDialog v-model="showFollowDialog"></FollowDialog>
     <SettingDialog v-model="showSettingDialog"></SettingDialog>
   </div>
 </template>
@@ -45,7 +43,7 @@ import MacControl from '../components/MacControl.vue'
 import Sidebar from '../components/Sidebar.vue'
 import FileList from '../components/FileList.vue'
 import AboutDialog from '../components/AboutDialog.vue'
-import SponsorDialog from '../components/SponsorDialog.vue'
+import FollowDialog from '../components/FollowDialog.vue'
 import SettingDialog from '../components/SettingDialog.vue'
 import { getLocalConfig } from '@/api'
 import { mapState, mapMutations } from 'vuex'
@@ -58,22 +56,21 @@ export default {
     Sidebar,
     FileList,
     AboutDialog,
-    SponsorDialog,
+    FollowDialog,
     SettingDialog,
     Name
   },
   data() {
     return {
       showAboutDialog: false,
-      showSponsorDialog: false,
+      showFollowDialog: false,
       showSettingDialog: false,
       showVipDialog: false
     }
   },
   computed: {
     ...mapState({
-      isDark: state => state.localConfig.isDark,
-      isVIP: state => state.isVIP
+      isDark: state => state.localConfig.isDark
     })
   },
   watch: {
@@ -106,19 +103,11 @@ export default {
         case 'about':
           this.showAboutDialog = true
           break
-        case 'sponsor':
-          this.showSponsorDialog = true
-          break
         case 'help':
           window.electronAPI.openHelpPage()
-          // window.electronAPI.openUrl(
-          //   'https://wanglin2.github.io/mind-map-docs/help/help1.html'
-          // )
           break
-        case 'doc':
-          window.electronAPI.openUrl(
-            'https://wanglin2.github.io/mind-map-docs/start/introduction.html'
-          )
+        case 'follow':
+          this.showFollowDialog = true
           break
         case 'setting':
           this.showSettingDialog = true

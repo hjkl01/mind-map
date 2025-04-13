@@ -5,6 +5,7 @@
       <Name v-if="IS_WIN"></Name>
       <div class="rightBar">
         <WinControl></WinControl>
+        <Name :isRight="true" v-if="IS_MAC"></Name>
       </div>
     </div>
     <div class="workbencheHelpContent customScrollbar">
@@ -16,15 +17,27 @@
             <span class="text">{{ item.title }}</span>
           </div>
           <div class="helpContentList">
-            <div class="helpContentItem" v-for="subItem in item.contentList">
+            <div
+              class="helpContentItem"
+              v-for="(subItem, index) in item.contentList"
+              :key="index"
+            >
               <p v-if="typeof subItem === 'string'">{{ subItem }}</p>
-              <el-image
-                v-else-if="subItem.type === 'img'"
-                :src="subItem.list[0]"
-                :preview-src-list="subItem.list"
-                style="width: 200px;"
+              <div
+                class="imgList"
+                v-else-if="subItem.type === 'img' && subItem.list.length > 0"
               >
-              </el-image>
+                <el-image
+                  v-for="(img, imgIndex) in subItem.list"
+                  :key="imgIndex"
+                  :src="img"
+                  :preview-src-list="subItem.list"
+                  :initial-index="imgIndex"
+                  style="width: 100px; height: 100px; margin-right: 10px;"
+                  fit="cover"
+                >
+                </el-image>
+              </div>
               <el-link
                 type="primary"
                 v-else-if="subItem.type === 'link'"

@@ -309,7 +309,7 @@
               style="width: 120px"
               v-model="style.shape"
               placeholder=""
-              @change="update('shape')"
+              @change="updateNodeShape"
             >
               <el-option
                 v-for="item in shapeList"
@@ -336,6 +336,7 @@
                     stroke-width="2"
                   ></path>
                 </svg>
+                <VipMark v-if="item.isVip"></VipMark>
               </el-option>
             </el-select>
           </div>
@@ -443,8 +444,9 @@
             <span class="name">{{ $t('style.openLineFlow') }}</span>
             <el-checkbox
               v-model="style.lineFlow"
-              @change="update('lineFlow')"
+              @change="updateLineFlow"
             ></el-checkbox>
+            <VipMark style="margin-left: 4px;"></VipMark>
           </div>
           <div class="rowItem">
             <span class="name">{{ $t('style.direction') }}</span>
@@ -570,12 +572,14 @@ import {
   alignList
 } from '@/config'
 import { mapState } from 'vuex'
+import VipMark from './VipMark.vue'
 
 // 节点样式设置
 export default {
   components: {
     Sidebar,
-    Color
+    Color,
+    VipMark
   },
   props: {
     mindMap: {
@@ -617,7 +621,8 @@ export default {
         textAlign: '',
         imgPlacement: '',
         tagPlacement: ''
-      }
+      },
+      shapeCache: ''
     }
   },
   computed: {
@@ -639,7 +644,8 @@ export default {
           return {
             width: '40px',
             name: item.nameShow,
-            value: item.name
+            value: item.name,
+            isVip: true
           }
         })
       ]
@@ -696,6 +702,7 @@ export default {
       Object.keys(this.style).forEach(item => {
         this.style[item] = this.activeNodes[0].getStyle(item, false)
       })
+      this.shapeCache = this.style.shape
       this.initLinearGradientDir()
     },
 
@@ -789,6 +796,29 @@ export default {
     changeEndColor(color) {
       this.style.endColor = color
       this.update('endColor')
+    },
+
+    // 切换节点形状
+    updateNodeShape() {
+      const isVipShape = this.shapeList.find(item => {
+        return item.value === this.style.shape
+      }).isVip
+      if (isVipShape && !this.isVIP) {
+        this.style.shape = this.shapeCache
+        this.isVIPCheck()
+        return
+      }
+      this.shapeCache = this.style.shape
+      this.update('shape')
+    },
+
+    // 开启流动效果
+    updateLineFlow(val) {
+      if (val && !this.isVIPCheck()) {
+        this.style.lineFlow = false
+        return
+      }
+      this.update('lineFlow')
     }
   }
 }
