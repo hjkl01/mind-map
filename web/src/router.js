@@ -5,7 +5,8 @@ import WorkbenchePage from '@/pages/Workbenche/Index'
 import WorkbencheHomePage from '@/pages/Workbenche/views/Home'
 import WorkbencheEditPage from '@/pages/Workbenche/views/Edit'
 import WorkbencheHelpPage from '@/pages/Workbenche/views/Help.vue'
-import WorkbencheVipPage from '@/pages/Workbenche/views/Vip.vue';
+import WorkbencheVipPage from '@/pages/Workbenche/views/Vip.vue'
+import WorkbencheChangelogPage from '@/pages/Workbenche/views/Changelog.vue'
 
 Vue.use(VueRouter)
 
@@ -24,22 +25,27 @@ const routes = [
       {
         path: 'home',
         name: 'WorkbencheHome',
-        component: WorkbencheHomePage,
+        component: WorkbencheHomePage
       },
       {
         path: 'edit/:id',
         name: 'WorkbencheEdit',
-        component: WorkbencheEditPage,
+        component: WorkbencheEditPage
       },
       {
         path: 'help',
         name: 'WorkbencheHelpPage',
-        component: WorkbencheHelpPage,
+        component: WorkbencheHelpPage
       },
       {
         path: 'vip',
         name: 'WorkbencheVipPage',
-        component: WorkbencheVipPage,
+        component: WorkbencheVipPage
+      },
+      {
+        path: 'changelog',
+        name: 'WorkbencheChangelogPage',
+        component: WorkbencheChangelogPage
       }
     ]
   }

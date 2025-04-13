@@ -21,6 +21,41 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
     mainWindow.webContents.send('refreshRecentFileList')
   }
 
+  // 新建更新日志页面
+  let changelogWindow = null
+  ipcMain.on('openChangelogPage', async () => {
+    if (changelogWindow) {
+      changelogWindow.moveTop()
+      return
+    }
+    changelogWindow = new BrowserWindow({
+      width: 1200,
+      height: 800,
+      frame: false,
+      titleBarStyle: 'hiddenInset',
+      webPreferences: {
+        webSecurity: false,
+        nodeIntegration: true,
+        enableRemoteModule: true,
+        contextIsolation: true,
+        preload: path.join(__dirname, 'preload.js')
+      }
+    })
+    changelogWindow.on('closed', () => {
+      changelogWindow = null
+    })
+    if (process.env.WEBPACK_DEV_SERVER_URL) {
+      // 如果处于开发模式，则加载开发服务器的url
+      await changelogWindow.loadURL(
+        process.env.WEBPACK_DEV_SERVER_URL + '/#/workbenche/changelog'
+      )
+      if (!process.env.IS_TEST) changelogWindow.webContents.openDevTools()
+    } else { 
+      // 非开发环境时加载index.html
+      changelogWindow.loadURL('app://./index.html/#/workbenche/changelog')
+    }
+  })
+
   // 新建会员页面
   let vipWindow = null
   ipcMain.on('openVipPage', async () => {

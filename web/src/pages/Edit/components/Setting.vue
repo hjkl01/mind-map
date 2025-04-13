@@ -278,6 +278,21 @@
           <VipMark></VipMark>
         </div>
       </div>
+      <!-- 是否开启演示模式的填空功能 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="config.demonstrateConfig.openBlankMode"
+            @change="
+              value => {
+                updateOtherConfig('openBlankMode', value)
+              }
+            "
+            >{{ $t('setting.openBlankMode') }}</el-checkbox
+          >
+          <VipMark></VipMark>
+        </div>
+      </div>
       <!-- 配置鼠标滚轮行为 -->
       <div class="row">
         <div class="rowItem">
@@ -428,7 +443,10 @@ export default {
         enableAutoEnterTextEditWhenKeydown: true,
         imgTextMargin: 0,
         textContentMargin: 0,
-        enableInheritAncestorLineStyle: false
+        enableInheritAncestorLineStyle: false,
+        demonstrateConfig: {
+          openBlankMode: false
+        }
       },
       watermarkConfig: {
         show: false,
@@ -487,7 +505,13 @@ export default {
     // 初始化其他配置
     initConfig() {
       Object.keys(this.config).forEach(key => {
-        this.config[key] = this.mindMap.getConfig(key)
+        if (typeof this.config[key] === 'object') {
+          this.config[key] = {
+            ...(this.mindMap.getConfig(key) || {})
+          }
+        } else {
+          this.config[key] = this.mindMap.getConfig(key)
+        }
       })
     },
 
@@ -515,10 +539,27 @@ export default {
 
     // 更新其他配置
     updateOtherConfig(key, value) {
-      this.mindMap.updateConfig({
-        [key]: value
-      })
-      this.configData[key] = value
+      if (['openBlankMode'].includes(key) && !this.isVIPCheck()) {
+        this.config.demonstrateConfig.openBlankMode = false
+        return
+      }
+      if (key === 'openBlankMode') {
+        this.mindMap.updateConfig({
+          demonstrateConfig: {
+            ...(this.mindMap.getConfig('demonstrateConfig') || {}),
+            openBlankMode: value
+          }
+        })
+        if (!this.configData.demonstrateConfig) {
+          this.configData.demonstrateConfig = {}
+        }
+        this.configData.demonstrateConfig[key] = value
+      } else {
+        this.mindMap.updateConfig({
+          [key]: value
+        })
+        this.configData[key] = value
+      }
       storeConfig(this.configData)
       if (
         [

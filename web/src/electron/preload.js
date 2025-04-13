@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   create: id => ipcRenderer.send('create', id),
   openHelpPage: () => ipcRenderer.send('openHelpPage'),
   openVipPage: () => ipcRenderer.send('openVipPage'),
+  openChangelogPage: () => ipcRenderer.send('openChangelogPage'),
   getFileContent: id => ipcRenderer.invoke('getFileContent', id),
   getFilePath: id => ipcRenderer.invoke('getFilePath', id),
   save: (id, data, fileName, defaultPath) =>

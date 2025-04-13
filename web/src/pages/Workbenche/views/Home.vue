@@ -21,6 +21,7 @@
             <el-dropdown-item command="about">关于软件</el-dropdown-item>
             <el-dropdown-item command="help">使用帮助</el-dropdown-item>
             <el-dropdown-item command="follow">关注我们</el-dropdown-item>
+            <el-dropdown-item command="changelog">更新记录</el-dropdown-item>
             <el-dropdown-item command="setting">设置</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -64,8 +65,7 @@ export default {
     return {
       showAboutDialog: false,
       showFollowDialog: false,
-      showSettingDialog: false,
-      showVipDialog: false
+      showSettingDialog: false
     }
   },
   computed: {
@@ -111,6 +111,9 @@ export default {
           break
         case 'setting':
           this.showSettingDialog = true
+          break
+        case 'changelog':
+          window.electronAPI.openChangelogPage()
           break
         default:
           break
@@ -170,16 +173,17 @@ export default {
     },
 
     showTip() {
-      const isTipped = localStorage.getItem('vip_tip')
+      localStorage.removeItem('vip_tip')
+      const isTipped = localStorage.getItem('vip_tip2')
       if (!isTipped) {
         const n = this.$notify({
           title: '提示',
           dangerouslyUseHTMLString: true,
           message:
-            '会员功能上线了~<span style="color: #409eff; font-weight: bold; cursor: pointer;">点击了解</span>一下吧。',
+            '会员功能上新了~新增了主题、形状、背景、结构等等，<span style="color: #409eff; font-weight: bold; cursor: pointer;">点击了解</span>一下吧。',
           duration: 0,
           onClick: () => {
-            this.showVipDialog = true
+            this.openVipPage()
             n.close()
             localStorage.setItem('vip_tip', true)
           },

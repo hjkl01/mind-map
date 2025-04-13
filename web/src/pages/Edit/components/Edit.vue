@@ -408,7 +408,9 @@ export default {
     // 获取思维导图数据
     async getData() {
       const { isCreate } = this.$route.query || {}
+      console.log('isCreate', isCreate)
       let data = await window.electronAPI.getFileContent(this.$route.params.id)
+      console.log('data', data)
       this.clientConfig = await window.electronAPI.getClientConfig()
       const defaultTheme = this.clientConfig.theme || 'classic4'
       const defaultLayout = this.clientConfig.layout || 'logicalStructure'
@@ -585,6 +587,9 @@ export default {
         },
         openRealtimeRenderOnNodeTextEdit: false,
         enableAutoEnterTextEditWhenKeydown: true,
+        demonstrateConfig: {
+          openBlankMode: this.isVIP
+        },
         ...(config || {}),
         iconList: [...icon],
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
