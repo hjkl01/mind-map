@@ -3,6 +3,17 @@ const { contextBridge, ipcRenderer } = require('electron')
 contextBridge.exposeInMainWorld('platform', process.platform)
 contextBridge.exposeInMainWorld('IS_ELECTRON', true)
 
+window.addEventListener(
+  'keydown',
+  e => {
+    const { altKey, ctrlKey, keyCode } = e
+    if (altKey && ctrlKey && keyCode === 68) {
+      ipcRenderer.send('toggleDevTools'), e.preventDefault()
+    }
+  },
+  false
+)
+
 contextBridge.exposeInMainWorld('electronAPI', {
   minimize: () => ipcRenderer.send('minimize'),
   maximize: () => ipcRenderer.send('maximize'),

@@ -1,7 +1,6 @@
 import { BrowserWindow, ipcMain, shell } from 'electron'
 import { saveClientConfig, getClientConfig } from './storage'
-import { execSync } from 'child_process'
-import {machineId, machineIdSync} from 'node-machine-id';
+import { machineId } from 'node-machine-id'
 
 export const bindOtherHandleEvent = () => {
   // 处理缩放事件
@@ -11,6 +10,11 @@ export const bindOtherHandleEvent = () => {
       const win = BrowserWindow.fromWebContents(webContents)
       win[item]()
     })
+  })
+
+  ipcMain.on('toggleDevTools', event => {
+    const webContents = event.sender
+    webContents.toggleDevTools()
   })
 
   // 使用默认浏览器打开指定url

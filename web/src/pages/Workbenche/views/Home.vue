@@ -16,7 +16,11 @@
           <span class="text">{{ isVIP ? '会员' : '开通会员' }}</span>
         </div>
         <el-dropdown @command="handleCommand" style="margin-right: 12px;">
-          <span class="settingBtn el-icon-setting"></span>
+          <span
+            class="settingBtn el-icon-setting"
+            :class="{ showDot: isShowDot }"
+            @click="onSettingClick"
+          ></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="about">关于软件</el-dropdown-item>
             <el-dropdown-item command="help">使用帮助</el-dropdown-item>
@@ -65,7 +69,8 @@ export default {
     return {
       showAboutDialog: false,
       showFollowDialog: false,
-      showSettingDialog: false
+      showSettingDialog: false,
+      isShowDot: false
     }
   },
   computed: {
@@ -79,6 +84,8 @@ export default {
     }
   },
   created() {
+    const isTipped = localStorage.getItem('setting_tip')
+    this.isShowDot = !isTipped
     this.initLocalConfig()
     this.setBodyDark()
   },
@@ -196,6 +203,11 @@ export default {
 
     openVipPage() {
       window.electronAPI.openVipPage()
+    },
+
+    onSettingClick() {
+      localStorage.removeItem('setting_tip')
+      this.isShowDot = false
     }
   }
 }
@@ -266,6 +278,20 @@ export default {
         cursor: pointer;
         display: flex;
         align-items: center;
+        position: relative;
+
+        &.showDot {
+          &::after {
+            position: absolute;
+            content: '';
+            right: -4px;
+            top: -4px;
+            width: 8px;
+            height: 8px;
+            background-color: #f56c6c;
+            border-radius: 50%;
+          }
+        }
       }
     }
   }
