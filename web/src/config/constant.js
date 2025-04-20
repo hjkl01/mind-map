@@ -162,12 +162,12 @@ export const rainbowLinesOptions = [
   }
 ]
 
-export const vipFileUrl = 'https://simple-mind-map.oss-cn-beijing.aliyuncs.com/vip.json'
+export const vipFileUrl = ''
 
-export const versionUrl = 'https://simple-mind-map.oss-cn-beijing.aliyuncs.com/version.json'
+export const versionUrl = ''
 
-export const helpFileUrl = 'https://simple-mind-map.oss-cn-beijing.aliyuncs.com/help.json'
+export const helpFileUrl = ''
 
-export const vipFunctionUrl = 'https://simple-mind-map.oss-cn-beijing.aliyuncs.com/vipfunction.json'
+export const vipFunctionUrl = ''
 
-export const changelogUrl = 'https://simple-mind-map.oss-cn-beijing.aliyuncs.com/changelog.json'
+export const changelogUrl = ''
